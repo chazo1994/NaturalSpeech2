@@ -159,7 +159,7 @@ class Inference_Dataset(torch.utils.data.Dataset):
         self.use_between_padding = use_between_padding
         self.hificodec = VQVAE(
             config_path= './hificodec/config_24k_320d.json',
-            ckpt_path= './hificodec/HiFi-Codec-24k-320d',
+            ckpt_path= '/Users/thinhhieu/Desktop/workspace/Projects/pretrain_models/HiFi-Codec-24k-320d',
             with_encoder= True
             )
 

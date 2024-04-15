@@ -41,9 +41,12 @@ phonemizer_dict = {
         words_mismatch= 'ignore',
         logger= logger
         )
+    # for key, language in [
+    #     ('English', 'en-us'),
+    #     ('Korean', 'ko')
+    #     ]
     for key, language in [
-        ('English', 'en-us'),
-        ('Korean', 'ko')
+        ('English', 'en-us')
         ]
     }
 
@@ -54,7 +57,7 @@ if __name__ == '__main__':
         device = torch.device('cuda:0')
     hificodec = VQVAE(
         config_path= './hificodec/config_24k_320d.json',
-        ckpt_path= './hificodec/HiFi-Codec-24k-320d',
+        ckpt_path= '/Users/thinhhieu/Desktop/workspace/Projects/pretrain_models/HiFi-Codec-24k-320d',
         with_encoder= True
         ).to(device)
     

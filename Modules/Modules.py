@@ -41,7 +41,7 @@ class NaturalSpeech2(torch.nn.Module):
 
         self.hificodec = VQVAE(
             config_path= './hificodec/config_24k_320d.json',
-            ckpt_path= './hificodec/HiFi-Codec-24k-320d',
+            ckpt_path= '/Users/thinhhieu/Desktop/workspace/Projects/pretrain_models/HiFi-Codec-24k-320d',
             with_encoder= False
             )
 
@@ -168,6 +168,7 @@ class NaturalSpeech2(torch.nn.Module):
         *_, diffusion_predictions = self.hificodec.quantizer(diffusion_predictions)
         diffusion_predictions = [code.reshape(tokens.size(0), -1) for code in diffusion_predictions]
         diffusion_predictions = torch.stack(diffusion_predictions, 2)
+        print('diffusion_predictions before hificodec: {}'.format(diffusion_predictions.shape))
         diffusion_predictions = self.hificodec(diffusion_predictions).squeeze(1)
         
         return diffusion_predictions, alignments, f0s
