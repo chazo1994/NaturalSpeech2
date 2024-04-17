@@ -50,16 +50,8 @@ phonemizer_dict = {
         ]
     }
 
-if __name__ == '__main__':
-    if not torch.cuda.is_available():
-        device = torch.device('cpu')
-    else:
-        device = torch.device('cuda:0')
-    hificodec = VQVAE(
-        config_path= './hificodec/config_24k_320d.json',
-        ckpt_path= '/Users/thinhhieu/Desktop/workspace/Projects/pretrain_models/HiFi-Codec-24k-320d',
-        with_encoder= True
-        ).to(device)
+# if __name__ == '__main__':
+    
     
 def Text_Filtering(text: str):
     remove_letter_list = ['(', ')', '\"', '[', ']', ':', ';']
@@ -334,6 +326,7 @@ def Pattern_File_Generate(
         files, latents, mels, f0s, speakers, emotions, languages, genders, datasets, texts, pronunciations
         ):
         if latent is None:
+            
             continue
         new_pattern_dict = {
             'Latent': latent,
@@ -766,7 +759,7 @@ def VCTK_Info_Load(path: str):
         print(f'VCTK info generated: {len(paths)}')
         return paths, text_dict, pronunciation_dict, speaker_dict, emotion_dict, language_dict, gender_dict
     
-    path = os.path.join(path, 'wav48').replace('\\', '/')
+    path = os.path.join(path, 'wav48_silence_trimmed').replace('\\', '/')
     
     paths = []
     for root, _, files in os.walk(path):
@@ -783,7 +776,7 @@ def VCTK_Info_Load(path: str):
     for path in paths:
         if 'p315'.upper() in path.upper():  #Officially, 'p315' text is lost in VCTK dataset.
             continue
-        text = Text_Filtering(unidecode(open(path.replace('wav48', 'txt').replace('flac', 'txt').replace('_mic2', ''), 'r').readlines()[0]))
+        text = Text_Filtering(unidecode(open(path.replace('wav48_silence_trimmed', 'txt').replace('flac', 'txt').replace('_mic2', ''), 'r').readlines()[0]))
         if text is None:
             continue
         
@@ -1326,12 +1319,14 @@ def Token_dict_Generate(tokens: Union[List[str], str]):
     
     os.makedirs(os.path.dirname(hp.Token_Path), exist_ok= True)    
     yaml.dump(token_dict, open(hp.Token_Path, 'w', encoding='utf-8-sig'), allow_unicode= True)
-
     return token_dict
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("-hp", "--hyper_parameters", required=True, type= str)
+    parser.add_argument("-cp", "--codec_checkpoint_path", required=True, type= str)
+    parser.add_argument("-c", "--codec_config_path", default="hificodec/config_24k_320d.json", type= str)
+    
     parser.add_argument("-selvas", "--selvas_path", required=False)
     parser.add_argument("-kss", "--kss_path", required=False)
     parser.add_argument("-aihub", "--aihub_path", required=False)
@@ -1353,7 +1348,16 @@ if __name__ == '__main__':
         open(args.hyper_parameters, encoding='utf-8'),
         Loader=yaml.Loader
         ))
-
+    if not torch.cuda.is_available():
+        device = torch.device('cpu')
+    else:
+        device = torch.device('cuda:0')
+    hificodec = VQVAE(
+        config_path= args.codec_config_path,
+        ckpt_path= args.codec_checkpoint_path,
+        with_encoder= True
+        ).to(device)
+    
     train_paths, eval_paths = [], []
     text_dict = {}
     pronunciation_dict = {}
@@ -1478,6 +1482,8 @@ if __name__ == '__main__':
 
     logging.info('Sorting...')
     train_paths, eval_paths = sorted(train_paths), sorted(eval_paths)
+    print('train_paths: {}'.format(train_paths))
+    print('eval_paths: {}'.format(eval_paths))
     logging.info('Sorting...Done')
 
     logging.info('Token dict generating')
@@ -1487,7 +1493,7 @@ if __name__ == '__main__':
     tokens = sorted(list(tokens))
     token_dict = Token_dict_Generate(tokens= tokens)
     logging.info('Token dict generating...Done')
-
+    logging.info('Pattern train files generating')
     for index in tqdm(range(0, len(train_paths), args.batch_size)):
         batch_paths = train_paths[index:index + args.batch_size]
         Pattern_File_Generate(
@@ -1502,6 +1508,8 @@ if __name__ == '__main__':
             tags= [tag_dict[path] for path in batch_paths],
             eval= False
             )
+    logging.info('Pattern train files generating...Done')
+    logging.info('Pattern val files generating')
     for index in tqdm(range(0, len(eval_paths), args.batch_size)):
         batch_paths = eval_paths[index:index + args.batch_size]
         Pattern_File_Generate(
@@ -1516,9 +1524,13 @@ if __name__ == '__main__':
             tags= [tag_dict[path] for path in batch_paths],
             eval= True
             )
-
+    logging.info('Pattern val files generating...Done')
+    logging.info('Pattern train meta data generating')
     Metadata_Generate()
+    logging.info('Pattern train meta data generating...done')
+    logging.info('Pattern val meta data generating')
     Metadata_Generate(eval= True)
+    logging.info('Pattern val meta data generating...done')
 
 # python Pattern_Generator.py -hp Hyper_Parameters.yaml -lj D:\Rawdata\LJSpeech
 # python Pattern_Generator.py -hp Hyper_Parameters.yaml -vctk D:\Rawdata\VCTK092

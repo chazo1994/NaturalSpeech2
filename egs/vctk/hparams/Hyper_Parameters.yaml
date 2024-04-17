@@ -1,0 +1,161 @@
+Sound:
+    Frame_Shift: 320
+    Sample_Rate: 22050
+    Mel_Dim: 80
+    F0_Min: 65
+    F0_Max: 2094
+
+Tokens: 55
+Use_Between_Padding: true
+Audio_Codec_Size: 512
+
+Encoder:
+    Size: 384
+    Transformer:
+        Stack: 6
+        Head: 2
+        FFN:
+            Kernel_Size: 17
+            Dropout_Rate: 0.1
+
+Speech_Prompter:
+    Size: 384
+    Transformer:
+        Stack: 6
+        Head: 2
+        FFN:
+            Kernel_Size: 9
+            Dropout_Rate: 0.2
+
+Duration_Predictor:
+    Stack: 10
+    Attention:
+        Head: 2
+    Conv:
+        Kernel_Size: 3
+        Stack: 3
+        Dropout_Rate: 0.2
+
+F0_Predictor:
+    Stack: 10
+    Attention:
+        Head: 2
+    Conv:
+        Kernel_Size: 3
+        Stack: 3
+        Dropout_Rate: 0.5
+
+Frame_Prior_Network:
+    Transformer:
+        Stack: 6
+        Head: 2
+        FFN:
+            Kernel_Size: 17
+            Dropout_Rate: 0.1
+
+Diffusion:
+    Max_Step: 100
+    Size: 256
+    Pre_Attention:
+        Query_Token: 32
+        Query_Size: 512
+        Head: 2
+    WaveNet:
+        Kernel_Size: 3
+        Dilation: 2
+        Stack: 40
+        Dropout_Rate: 0.2
+        Attention:
+            Apply_in_Stack: 3
+            Head: 2
+    Network_Prediction: 'Start'   # 'Start', 'Epsilon'
+            
+
+Token_Path: '/Users/thinhhieu/Desktop/workspace/Projects/data/VCTK-Corpus-0.92/pattern_data/yaml//Token.yaml'
+Latent_Info_Path: '/Users/thinhhieu/Desktop/workspace/Projects/data/VCTK-Corpus-0.92/pattern_data/yaml//Latent_Info.yaml'
+Mel_Info_Path: '/Users/thinhhieu/Desktop/workspace/Projects/data/VCTK-Corpus-0.92/pattern_data/yaml//Mel_Info.yaml'
+F0_Info_Path: '/Users/thinhhieu/Desktop/workspace/Projects/data/VCTK-Corpus-0.92/pattern_data/yaml//F0_Info.yaml'
+Speaker_Info_Path: '/Users/thinhhieu/Desktop/workspace/Projects/data/VCTK-Corpus-0.92/pattern_data/yaml//Speaker_Info.yaml'
+Emotion_Info_Path: '/Users/thinhhieu/Desktop/workspace/Projects/data/VCTK-Corpus-0.92/pattern_data/yaml//Emotion_Info.yaml'
+Language_Info_Path: '/Users/thinhhieu/Desktop/workspace/Projects/data/VCTK-Corpus-0.92/pattern_data/yaml//Language_Info.yaml'
+Gender_Info_Path: '/Users/thinhhieu/Desktop/workspace/Projects/data/VCTK-Corpus-0.92/pattern_data/yaml//Gender_Info.yaml'
+Language_and_Gender_Info_by_Speaker_Path: '/Users/thinhhieu/Desktop/workspace/Projects/data/VCTK-Corpus-0.92/pattern_data/yaml//Language_and_Gender_Info_by_Speaker.yaml'
+Train:
+    Pattern_Cache: true
+    # Pattern_Cache: false
+    Train_Pattern:
+        Path: '.'
+        Metadata_File: 'METADATA.PICKLE'
+        Feature_Length:
+            Min: 50
+            Max: 800
+        Text_Length:
+            Min: 1
+            Max: 200
+        Accumulated_Dataset_Epoch: 1 # This is to prevent slow down from torch.utils.data.DataLoader when the number of patterns is small.
+        Augmentation_Ratio: 0.10
+    Eval_Pattern:
+        Path: '.'
+        Metadata_File: 'METADATA.PICKLE'
+        Feature_Length:
+            Min: 50
+            Max: 800
+        Text_Length:
+            Min: 10
+            Max: 200
+    Num_Workers: 0
+    Batch_Size: 16
+    Segment_Size: 64
+    Learning_Rate:
+        Initial: 1.0e-4
+        Warmup_Step: 4000
+        Diffusion_Lambda: 10.0
+    ADAM:
+        Beta1: 0.9
+        Beta2: 0.999
+        Epsilon: 1.0e-7
+    Accumulated_Gradient_Step: 1 # 25
+    Gradient_Norm: 0.0
+    Max_Step: 1000000
+    Checkpoint_Save_Interval: 5000
+    Logging_Interval: 1
+    Evaluation_Interval: 1000
+    Inference_Interval: 5000
+    Initial_Inference: true
+    # Initial_Inference: false
+    Inference_in_Train:
+        Text: [
+            'Do not kill the goose that lays the golden eggs.',
+            'A good medicine tastes bitter.',
+            'Do not count your chickens before they hatch.',
+            'If you laugh, blessings will come your way.'
+            ]
+        Reference: [
+            'Inference_Wav/p279_003_mic2.flac',
+            'Inference_Wav/p280_006_mic1.flac',
+            'Inference_Wav/p362_002_mic1.flac',
+            'Inference_Wav/s5_004_mic2.flac'
+            ]
+        Speech_Prompt_Length: 250   # 50 == 1 seconds
+
+Inference_Batch_Size: 16
+
+Inference_Path: '.'
+Checkpoint_Path: '.'
+Log_Path: '.'
+
+Weights_and_Biases:
+    # Use: true
+    Use: false
+    Project: 'NaturalSpeech2'
+    Entity: 'codejin'
+    Name: '.'
+    Save_Checkpoint:
+        Use: false
+        Interval: 50000 # Unlike local, The capacity of WandB is small.
+
+Use_Mixed_Precision: true   # Don't use mixed precision in this model.
+Use_Multi_GPU: false
+Device: '0'
+# Use_Multi_GPU: true
+# Device: '0,1,2,3,4,5,6,7'
