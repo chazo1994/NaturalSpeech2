@@ -121,6 +121,8 @@ class Trainer:
             use_between_padding= self.hp.Use_Between_Padding,
             texts= self.hp.Train.Inference_in_Train.Text,
             references= self.hp.Train.Inference_in_Train.Reference,
+            codec_checkpoint_path = self.hp.codec_checkpoint_path,
+            codec_config_path = self.hp.codec_config_path
             )
 
         if self.gpu_id == 0:

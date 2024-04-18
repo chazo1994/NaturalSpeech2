@@ -12,3 +12,4 @@ transformers
 einops
 seaborn
 pandas
+PyYAML

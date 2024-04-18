@@ -71,20 +71,24 @@ Diffusion:
     Network_Prediction: 'Start'   # 'Start', 'Epsilon'
             
 
-Token_Path: '/Users/thinhhieu/Desktop/workspace/Projects/data/VCTK-Corpus-0.92/pattern_data/yaml//Token.yaml'
-Latent_Info_Path: '/Users/thinhhieu/Desktop/workspace/Projects/data/VCTK-Corpus-0.92/pattern_data/yaml//Latent_Info.yaml'
-Mel_Info_Path: '/Users/thinhhieu/Desktop/workspace/Projects/data/VCTK-Corpus-0.92/pattern_data/yaml//Mel_Info.yaml'
-F0_Info_Path: '/Users/thinhhieu/Desktop/workspace/Projects/data/VCTK-Corpus-0.92/pattern_data/yaml//F0_Info.yaml'
-Speaker_Info_Path: '/Users/thinhhieu/Desktop/workspace/Projects/data/VCTK-Corpus-0.92/pattern_data/yaml//Speaker_Info.yaml'
-Emotion_Info_Path: '/Users/thinhhieu/Desktop/workspace/Projects/data/VCTK-Corpus-0.92/pattern_data/yaml//Emotion_Info.yaml'
-Language_Info_Path: '/Users/thinhhieu/Desktop/workspace/Projects/data/VCTK-Corpus-0.92/pattern_data/yaml//Language_Info.yaml'
-Gender_Info_Path: '/Users/thinhhieu/Desktop/workspace/Projects/data/VCTK-Corpus-0.92/pattern_data/yaml//Gender_Info.yaml'
-Language_and_Gender_Info_by_Speaker_Path: '/Users/thinhhieu/Desktop/workspace/Projects/data/VCTK-Corpus-0.92/pattern_data/yaml//Language_and_Gender_Info_by_Speaker.yaml'
+Token_Path: '/home/ubuntu/data/VCTK-Corpus-0.92/pattern_data/yaml//Token.yaml'
+Latent_Info_Path: '/home/ubuntu/data/VCTK-Corpus-0.92/pattern_data/yaml//Latent_Info.yaml'
+Mel_Info_Path: '/home/ubuntu/data/VCTK-Corpus-0.92/pattern_data/yaml//Mel_Info.yaml'
+F0_Info_Path: '/home/ubuntu/data/VCTK-Corpus-0.92/pattern_data/yaml//F0_Info.yaml'
+Speaker_Info_Path: '/home/ubuntu/data/VCTK-Corpus-0.92/pattern_data/yaml//Speaker_Info.yaml'
+Emotion_Info_Path: '/home/ubuntu/data/VCTK-Corpus-0.92/pattern_data/yaml//Emotion_Info.yaml'
+Language_Info_Path: '/home/ubuntu/data/VCTK-Corpus-0.92/pattern_data/yaml//Language_Info.yaml'
+Gender_Info_Path: '/home/ubuntu/data/VCTK-Corpus-0.92/pattern_data/yaml//Gender_Info.yaml'
+Language_and_Gender_Info_by_Speaker_Path: '/home/ubuntu/data/VCTK-Corpus-0.92/pattern_data/yaml//Language_and_Gender_Info_by_Speaker.yaml'
+
+codec_checkpoint_path: '/home/ubuntu/Projects/pretrain_models/HiFi-Codec-24k-320d'
+codec_config_path: '/home/ubuntu/Projects/NaturalSpeech2/hificodec/config_24k_320d.json'
+
 Train:
     Pattern_Cache: true
     # Pattern_Cache: false
     Train_Pattern:
-        Path: '.'
+        Path: '/home/ubuntu/data/VCTK-Corpus-0.92/pattern_data/train'
         Metadata_File: 'METADATA.PICKLE'
         Feature_Length:
             Min: 50
@@ -95,7 +99,7 @@ Train:
         Accumulated_Dataset_Epoch: 1 # This is to prevent slow down from torch.utils.data.DataLoader when the number of patterns is small.
         Augmentation_Ratio: 0.10
     Eval_Pattern:
-        Path: '.'
+        Path: '/home/ubuntu/data/VCTK-Corpus-0.92/pattern_data/eval'
         Metadata_File: 'METADATA.PICKLE'
         Feature_Length:
             Min: 50
@@ -104,7 +108,7 @@ Train:
             Min: 10
             Max: 200
     Num_Workers: 0
-    Batch_Size: 16
+    Batch_Size: 10
     Segment_Size: 64
     Learning_Rate:
         Initial: 1.0e-4
@@ -141,8 +145,8 @@ Train:
 Inference_Batch_Size: 16
 
 Inference_Path: '.'
-Checkpoint_Path: '.'
-Log_Path: '.'
+Checkpoint_Path: "/home/ubuntu/Projects/NaturalSpeech2/egs/vctk/exp/NS2_VCTK"
+Log_Path: "/home/ubuntu/Projects/NaturalSpeech2/egs/vctk/exp/NS2_VCTK/logs"
 
 Weights_and_Biases:
     # Use: true

@@ -150,7 +150,10 @@ class Inference_Dataset(torch.utils.data.Dataset):
         hop_size: int,
         use_between_padding: bool,
         texts: List[str],
-        references: List[str]
+        references: List[str],
+        codec_checkpoint_path: str,
+        codec_config_path = "hificodec/config_24k_320d.json",
+
         ):
         super().__init__()
         self.token_dict = token_dict
@@ -158,8 +161,8 @@ class Inference_Dataset(torch.utils.data.Dataset):
         self.hop_size = hop_size
         self.use_between_padding = use_between_padding
         self.hificodec = VQVAE(
-            config_path= './hificodec/config_24k_320d.json',
-            ckpt_path= '/Users/thinhhieu/Desktop/workspace/Projects/pretrain_models/HiFi-Codec-24k-320d',
+            config_path= codec_config_path,
+            ckpt_path= codec_checkpoint_path,
             with_encoder= True
             )
 

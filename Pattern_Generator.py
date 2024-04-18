@@ -1482,8 +1482,8 @@ if __name__ == '__main__':
 
     logging.info('Sorting...')
     train_paths, eval_paths = sorted(train_paths), sorted(eval_paths)
-    print('train_paths: {}'.format(train_paths))
-    print('eval_paths: {}'.format(eval_paths))
+    # print('train_paths: {}'.format(train_paths))
+    # print('eval_paths: {}'.format(eval_paths))
     logging.info('Sorting...Done')
 
     logging.info('Token dict generating')

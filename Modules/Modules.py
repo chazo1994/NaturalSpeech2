@@ -24,7 +24,6 @@ class NaturalSpeech2(torch.nn.Module):
         self.hp = hyper_parameters
         self.latent_min = latent_min
         self.latent_max = latent_max
-
         self.encoder = Encoder(self.hp)
         self.speech_prompter = Speech_Prompter(self.hp)
 
@@ -40,8 +39,8 @@ class NaturalSpeech2(torch.nn.Module):
         self.diffusion = Diffusion(self.hp)
 
         self.hificodec = VQVAE(
-            config_path= './hificodec/config_24k_320d.json',
-            ckpt_path= '/Users/thinhhieu/Desktop/workspace/Projects/pretrain_models/HiFi-Codec-24k-320d',
+            config_path= self.hp.codec_config_path,
+            ckpt_path= self.hp.codec_checkpoint_path,
             with_encoder= False
             )
 

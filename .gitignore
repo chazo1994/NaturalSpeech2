@@ -8,6 +8,10 @@
 /wandb
 /POT_Test
 *.pyc
+*.log
+__pycache__/
+egs/*/*/exp*
+egs/*/exp*
 
 /Modules/monotonic_align/__pycache__
 /Modules/monotonic_align/build
@@ -16,11 +20,6 @@
 
 temp.py
 *.pickle
-Train_ALF_stochastic.py
-Modules/Modules_ALF_stochastic.py
-Modules/Stochastic_Duration_Predictor_Transforms.py
-Modules/Stochastic_Duration_Predictor.py
-Train.py
 hificodec/HiFi-Codec-24k-320d
 *.png
 /3000K_Test
